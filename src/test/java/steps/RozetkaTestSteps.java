@@ -65,4 +65,9 @@ public class RozetkaTestSteps extends WebDriverSetup {
         Assert.assertTrue("Failed assert that actual text contains expected. Expected: '" + $expectedText +"' Actual: '" + actualText +"'",
                 actualText.contains($expectedText));
     }
+
+    @Given("I save data for 3 devices from 3 pages into databse")
+    public void saveDataIntoDatabase(){
+        smartphonesPage.setAllDevicesDataToDB();
+    }
 }

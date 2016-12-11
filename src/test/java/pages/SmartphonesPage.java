@@ -4,6 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import setup.DBHelper;
 import setup.PropertiesReader;
 
 import java.io.BufferedWriter;
@@ -23,6 +24,8 @@ public class SmartphonesPage extends BasePage {
     private PropertiesReader propertiesReader = new PropertiesReader();
     private String expectedSortingOptionText;
     private String filePath;
+    private String dbTableName;
+    private static int id = 0;
 
 //    public String getSortingOptionText(){
 //        try {
@@ -40,6 +43,15 @@ public class SmartphonesPage extends BasePage {
             e.printStackTrace();
         }
         return filePath;
+    }
+
+    public String getDBTableName(){
+        try {
+            dbTableName = propertiesReader.getProperty("dbTableName");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return dbTableName;
     }
 
     @FindBy(xpath = "//i[.='Доступные смартфоны']//parent::span[contains(@class, 'parametrs')]")
@@ -173,5 +185,29 @@ public class SmartphonesPage extends BasePage {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setDevicesDataToDB(String tableName){
+        String idString;
+        String name;
+        String price;
+        for (int i = 0; i < 3; i++){
+            id++;
+            idString = Integer.toString(id);
+            name = deviceName.get(i).getText();
+            price = devicePrice.get(i).getText();
+
+            DBHelper dbHelper = new DBHelper();
+            dbHelper.setDBTableData(idString, name, price, tableName);
+        }
+    }
+
+    public void setAllDevicesDataToDB(){
+        this.openFirstList();
+        this.setDevicesDataToDB(this.getDBTableName());
+        this.openSecondList();
+        this.setDevicesDataToDB(this.getDBTableName());
+        this.openThirdList();
+        this.setDevicesDataToDB(this.getDBTableName());
     }
 }
