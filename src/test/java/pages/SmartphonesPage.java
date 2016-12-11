@@ -203,11 +203,15 @@ public class SmartphonesPage extends BasePage {
     }
 
     public void setAllDevicesDataToDB(){
+        DBHelper dbHelper = new DBHelper();
+        dbHelper.createTable(this.getDBTableName());
         this.openFirstList();
         this.setDevicesDataToDB(this.getDBTableName());
         this.openSecondList();
         this.setDevicesDataToDB(this.getDBTableName());
         this.openThirdList();
         this.setDevicesDataToDB(this.getDBTableName());
+
+        System.out.println(dbHelper.getDBCreatedPhoneData(this.getDBTableName()));
     }
 }
